@@ -40,7 +40,7 @@
                 <td><span v-if="!discipline.exempt">{{ discipline.total }}</span></td>
             </tr>
             <tr>
-                <td>coefs</td>
+                <td>Coefs</td>
                 <td>{{ coefSum }}</td>
             </tr>
             <tr>
@@ -48,7 +48,7 @@
                 <td>{{ marksSum }}</td>
             </tr>
             <tr>
-                <td>average</td>
+                <td>المعدل العام</td>
                 <td>{{ average }}</td>
             </tr>
         </table>
@@ -170,6 +170,7 @@
         width: 6rem;
         text-align: center;
         font-weight: bold;
+        direction: ltr;
 
     }
 
