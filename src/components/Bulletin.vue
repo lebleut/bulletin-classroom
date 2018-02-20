@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="overflow-x: scroll;">
         <hr>
         <h2>المدرسة الإعدادية بالبقالطة</h2>
         <h1 style="text-align:center;">بطاقة النتائج المدرسية (تقريبية)</h1>
@@ -17,7 +17,10 @@
             <tr :class="{exempt: discipline.exempt}" v-for="( discipline, indd ) in disciplines">
                 <td class="discipline_name">
                     {{ discipline.name }}
-                    <button style="float: left;" @click="disciplines[indd].exempt = !disciplines[indd].exempt">معفى<span v-if="!discipline.exempt"> ؟</span></button>
+                    <button
+                        style="float: left;"
+                        @click="disciplines[indd].exempt = !disciplines[indd].exempt"
+                    >معفى<span> ؟</span></button>
                 </td>
                 <td><span v-if="!discipline.exempt">{{ discipline.coef }}</span></td>
                 
@@ -179,12 +182,20 @@
         width: 180px;
     }
 
+    tr button {
+        opacity: 0;
+        width: 8rem;
+    }
     tr.exempt{
         background: #9E9E9E;
     }
     tr.exempt button {
         background: #8BC34A;
         font-weight: bold;
+    }
+    tr:hover button,
+    tr.exempt button {
+        opacity: 1;
     }
 
     input.error{
@@ -195,12 +206,4 @@
         background: yellow;
     }
 
-    tr button {
-        display: none;
-        width: 8rem;
-    }
-    tr:hover button,
-    tr.exempt button {
-        display: block;
-    }
 </style>
