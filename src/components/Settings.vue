@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div style="direction:rtl;">
         <hr>
         <h1>الإعدادات</h1>
         <hr>

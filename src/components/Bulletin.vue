@@ -1,10 +1,10 @@
 <template>
-    <div class="container" style="overflow-x: scroll;">
+    <div>
         <hr>
-        <h2>المدرسة الإعدادية بالبقالطة</h2>
-        <h1 style="text-align:center;">بطاقة النتائج المدرسية (تقريبية)</h1>
+        <h2 style="text-align:center; direction:rtl;">المدرسة الإعدادية بالبقالطة</h2>
+        <h1 style="text-align:center; direction:rtl;">بطاقة النتائج المدرسية (تقريبية)</h1>
         <hr>
-        <table>
+        <table style="margin-left: auto; margin-right: auto;">
             <tr>
                 <th>المادة</th>
                 <th>الضارب</th> 
@@ -12,45 +12,47 @@
                 <th v-for="markName in markNames">{{ markName }}</th>
 
                 <th>المعدل</th>
-                <th>المجموع</th>
             </tr>
             <tr :class="{exempt: discipline.exempt}" v-for="( discipline, indd ) in disciplines">
                 <td class="discipline_name">
                     {{ discipline.name }}
                     <button
+                        class="ext"
                         style="float: left;"
                         @click="disciplines[indd].exempt = !disciplines[indd].exempt"
+                        tabIndex="-1"
                     >معفى<span> ؟</span></button>
                 </td>
                 <td><span v-if="!discipline.exempt">{{ discipline.coef }}</span></td>
                 
                 <td v-for="( markName, indm ) in markNames">
-                    <input
-                        type="number"
-                        v-model="discipline.marks.filter( function(m){ return m.name == markName })[0].val"
-                        @input="marksUpdated()"
-                        placeholder="--.--"
-                        :class="{
-                            zero: parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) == 0,
-                            error: parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) > 20 || parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) < 0
-                        }"
-                        :tabindex="indd+1"
-                        v-if="!discipline.exempt && discipline.marks.filter(function(mrk){ return mrk.name == markName }).length > 0"
-                    >
+                    <template v-if="!discipline.exempt && discipline.marks.filter(function(mrk){ return mrk.name == markName }).length > 0">
+                        <input
+                            type="number"
+                            v-model="discipline.marks.filter( function(m){ return m.name == markName })[0].val"
+                            @input="marksUpdated()"
+                            placeholder="--.--"
+                            :class="{
+                                empty: discipline.marks.filter( function(m){ return m.name == markName })[0].val == '',
+                                filled: parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) <= 20 && parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) > 0,
+                                zero: parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) == 0,
+                                error: parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) > 20 || parseFloat(discipline.marks.filter( function(m){ return m.name == markName })[0].val) < 0
+                            }"
+                        >
+                    </template>
+                    <template v-else>
+                        <button
+                            class="add"
+                            :title="'إضافة عدد ('+markName+') لمادة (ال'+discipline.name+')'"
+                            @click="addNewMarkForDiscipline(markName, discipline.name)"
+                            tabIndex="-1"
+                        >+</button>
+                    </template>
                 </td>
 
-                <td><span v-if="!discipline.exempt">{{ discipline.average }}</span></td>
-                <td><span v-if="!discipline.exempt">{{ discipline.total }}</span></td>
+                <td><span v-if="!discipline.exempt" style="font-weight: bold;">{{ discipline.average }}</span></td>
             </tr>
-            <tr>
-                <td>Coefs</td>
-                <td>{{ coefSum }}</td>
-            </tr>
-            <tr>
-                <td>total</td>
-                <td>{{ marksSum }}</td>
-            </tr>
-            <tr>
+            <tr style="background: burlywood; font-weight: bold; font-size: large;">
                 <td>المعدل العام</td>
                 <td>{{ average }}</td>
             </tr>
@@ -111,6 +113,26 @@
                 // Emit to root
                 eventBusBulletin.$emit("disciplinesUpdated", tmpDisciplines)
             },
+            addNewMarkForDiscipline: function(markName, disciplineName){
+                var self = this
+                var confMsg = "هل أنت متأكد أنك تريد إضافة عدد "+markName+" لمادة ال"+disciplineName+" ?"
+                if( window.confirm( confMsg ) ){
+                    self.disciplines.forEach(function( dis, index, arr ){
+                        if( dis.name == disciplineName ){
+                            var mark = {
+                                "name": markName,
+                                "coef": "1",
+                                "val": ""
+                            }
+
+                            self.disciplines[index].marks.push(mark)
+
+                            self.marksUpdated()
+                        }
+                    })
+
+                }
+            }
         },
         computed:{
             coefSum:function(){
@@ -178,26 +200,30 @@
     }
 
     td.discipline_name{
-        text-align: right;
+        text-align: center;
         width: 180px;
+        font-weight: bold;
+        direction: rtl;
     }
 
-    tr button {
+    tr button.ext {
         opacity: 0;
         width: 8rem;
     }
     tr.exempt{
         background: #9E9E9E;
     }
-    tr.exempt button {
+    tr.exempt button.ext {
         background: #8BC34A;
         font-weight: bold;
     }
-    tr:hover button,
-    tr.exempt button {
+    tr:hover button.ext,
+    tr.exempt button.ext {
         opacity: 1;
     }
-
+    input.empty{
+        background: #ff980042;
+    }
     input.error{
         background: red;
         color: white;
@@ -205,5 +231,16 @@
     input.zero{
         background: yellow;
     }
+    input.filled{
+        background: #8BC34A;
+    }
 
+    button.add{
+        display: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    td:hover button.add{
+        display: block;
+    }
 </style>

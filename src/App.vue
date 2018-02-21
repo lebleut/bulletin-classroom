@@ -1,8 +1,10 @@
 <template>
-    <div class="container" style="direction: rtl;">
+    <div>
         <hr>
-        <button @click="currentSection = 'appSettings'">الإعدادات</button>
-        <button @click="currentSection = 'appBulletin'">بطاقة النتائج المدرسية (تقريبية)</button>
+        <div class="buttons">
+            <button @click="currentSection = 'appSettings'">الإعدادات</button>
+            <button @click="currentSection = 'appBulletin'">بطاقة النتائج المدرسية (تقريبية)</button>
+        </div>
 
         <keep-alive>
             <component :is="currentSection" :disciplines="disciplines" :markNames="markNames"></component>
@@ -102,6 +104,10 @@
                         "total": "",
                         "exempt": false,
                         "marks": [{
+                            "name": "شفاهي",
+                            "coef": "1",
+                            "val": ""
+                        }, {
                             "name": "اختبار كتابي",
                             "coef": "1",
                             "val": ""
@@ -117,6 +123,10 @@
                         "total": "",
                         "exempt": false,
                         "marks": [{
+                            "name": "شفاهي",
+                            "coef": "1",
+                            "val": ""
+                        }, {
                             "name": "اختبار كتابي",
                             "coef": "1",
                             "val": ""
@@ -345,4 +355,10 @@
 </script>
 
 <style>
+body{
+    padding: 10px 20px;
+}
+.buttons{
+    direction: rtl;
+}
 </style>
