@@ -7,11 +7,10 @@
         <table style="margin-left: auto; margin-right: auto;">
             <tr>
                 <th>المادة</th>
-                <th>الضارب</th> 
+                <th>المعدل</th>
                 
                 <th v-for="markName in markNames">{{ markName }}</th>
 
-                <th>المعدل</th>
             </tr>
             <tr :class="{exempt: discipline.exempt}" v-for="( discipline, indd ) in disciplines">
                 <td class="discipline_name">
@@ -23,7 +22,7 @@
                         tabIndex="-1"
                     >معفى<span> ؟</span></button>
                 </td>
-                <td><span v-if="!discipline.exempt">{{ discipline.coef }}</span></td>
+                <td><span v-if="!discipline.exempt" style="font-weight: bold;">{{ discipline.average }}</span></td>
                 
                 <td v-for="( markName, indm ) in markNames">
                     <template v-if="!discipline.exempt && discipline.marks.filter(function(mrk){ return mrk.name == markName }).length > 0">
@@ -50,7 +49,6 @@
                     </template>
                 </td>
 
-                <td><span v-if="!discipline.exempt" style="font-weight: bold;">{{ discipline.average }}</span></td>
             </tr>
             <tr style="background: burlywood; font-weight: bold; font-size: large;">
                 <td>المعدل العام</td>
