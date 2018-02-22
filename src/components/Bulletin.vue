@@ -6,6 +6,11 @@
         <hr>
         <table style="margin-left: auto; margin-right: auto;">
             <tr>
+                <td colspan="12">
+                    <app-info/>
+                </td>
+            </tr>
+            <tr>
                 <th>المادة</th>
                 <th>المعدل</th>
                 
@@ -44,6 +49,7 @@
 
     import Feedback from './Feedback.vue'
     import MarkCell from './MarkCell.vue'
+    import Info from './Info.vue'
 
     export default {
         
@@ -56,6 +62,7 @@
         components:{
             "app-feedback": Feedback,
             "app-mark-cell": MarkCell,
+            "app-info": Info,
         },
         methods:{
 

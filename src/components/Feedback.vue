@@ -1,5 +1,5 @@
 <template>
-	<div class="feedback">
+	<div class="feedback no-print">
 		<h2>
 			<label>هل لديك تنويه أو إقتراح ؟</label>
 		</h2>

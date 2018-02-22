@@ -1,7 +1,6 @@
 <template>
     <div>
-        <hr>
-        <div class="buttons">
+        <div class="buttons no-print">
             <button @click="currentSection = 'appSettings'">الإعدادات</button>
             <button @click="currentSection = 'appBulletin'">بطاقة النتائج المدرسية (تقريبية)</button>
         </div>
@@ -355,6 +354,13 @@
 </script>
 
 <style>
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
 body{
     padding: 10px 20px;
 }
