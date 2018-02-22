@@ -57,12 +57,15 @@
                 <td>{{ average }}</td>
             </tr>
         </table>
+        <app-feedback/>
     </div>
+
 </template>
 
 <script>
     import { eventBusBulletin } from '../main.js'
 
+    import Feedback from './Feedback.vue'
 
     export default {
         
@@ -71,6 +74,9 @@
         data: function(){
             return {
             }
+        },
+        components:{
+            "app-feedback": Feedback,
         },
         methods:{
             disciplineAverage: function(discip){
