@@ -27,7 +27,7 @@
                         tabIndex="-1"
                     >معفى<span> ؟</span></button>
                 </td>
-                <td><span v-if="!discipline.exempt" style="font-weight: bold;">{{ discipline.average }}</span></td>
+                <td style="font-weight: bold; font-size: 1.7rem; background:lightgrey;"><span v-if="!discipline.exempt">{{ discipline.average }}</span></td>
                 
                 <td v-for="( markName, indm ) in markNames">
                     <app-mark-cell :disciplines="disciplines" :discipline="discipline" :markName="markName" :indm="indm" />
@@ -37,6 +37,9 @@
             <tr style="background: burlywood; font-weight: bold; font-size: large;">
                 <td>المعدل العام</td>
                 <td>{{ average }}</td>
+                <td colspan="2" class="no-print" v-if="parseFloat(average) > 0">
+                    <button style="width:100%;" onClick="window.print()">طباعة</button>
+                </td>
             </tr>
         </table>
         <app-feedback/>
