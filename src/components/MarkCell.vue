@@ -37,15 +37,38 @@
             }
         },
         methods:{
-            disciplineAverage: function(discip){
-                var sumMarks = discip.marks.reduce( function(acc, mark){
+            sumDiscMarks: function(discipline){
+                return discipline.marks.reduce( function(acc, mark){
                     return parseFloat(acc) + ( parseFloat(mark.val) * parseFloat(mark.coef) )
                 }, 0)
-
-                var sumCoefs = discip.marks.reduce( function(acc, mark){
+            },
+            sumDiscCoefs: function(discipline){
+                return discipline.marks.reduce( function(acc, mark){
                     return parseFloat(acc) + parseFloat(mark.coef)
                 }, 0)
-                
+            },
+            disciplineAverage: function(discipline){
+                var self = this
+                var sumMarks = self.sumDiscMarks(discipline)
+                var sumCoefs = self.sumDiscCoefs(discipline)
+
+                // Check for children disciples marks and coefs
+                sumMarks += self.disciplines.reduce(function(acc, des){
+                    if( typeof(des.parent) != 'undefined' && des.parent == discipline.name ){
+                        return parseFloat(acc) + self.sumDiscMarks(des)
+                    }else{
+                        return parseFloat(acc)
+                    }
+                }, 0)
+
+                sumCoefs += self.disciplines.reduce(function(acc, des){
+                    if( typeof(des.parent) != 'undefined' && des.parent == discipline.name ){
+                        return parseFloat(acc) + self.sumDiscCoefs(des)
+                    }else{
+                        return parseFloat(acc)
+                    }
+                }, 0)
+
                 var ret = sumMarks/sumCoefs
 
                 if( isNaN(ret) ){
@@ -69,8 +92,10 @@
                 var tmpDisciplines = this.disciplines
 
                 tmpDisciplines = tmpDisciplines.map( function(discip){
-                    discip.average = self.disciplineAverage( discip )
-                    discip.total = self.disciplineTotal( discip )
+                    if( typeof(discip.parent) == 'undefined' || discip.parent == '' ){
+                        discip.average = self.disciplineAverage( discip )
+                        discip.total = self.disciplineTotal( discip )                        
+                    }
                     return discip
                 })
 

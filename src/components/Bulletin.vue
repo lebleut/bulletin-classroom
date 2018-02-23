@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <hr>
         <h2 style="text-align:center; direction:rtl;">المدرسة الإعدادية بالبقالطة</h2>
         <h1 style="text-align:center; direction:rtl;">بطاقة النتائج المدرسية (تقريبية)</h1>
@@ -12,10 +12,10 @@
             </tr>
             <tr>
                 <th>المادة</th>
-                <th>المعدل</th>
                 
                 <th v-for="markName in markNames">{{ markName }}</th>
 
+                <th>المعدل</th>
             </tr>
             <tr :class="{exempt: discipline.exempt}" v-for="( discipline, indd ) in disciplines">
                 <td class="discipline_name">
@@ -27,12 +27,12 @@
                         tabIndex="-1"
                     >معفى<span> ؟</span></button>
                 </td>
-                <td style="font-weight: bold; font-size: 1.7rem; background:lightgrey;"><span v-if="!discipline.exempt">{{ discipline.average }}</span></td>
                 
                 <td v-for="( markName, indm ) in markNames">
                     <app-mark-cell :disciplines="disciplines" :discipline="discipline" :markName="markName" :indm="indm" />
                 </td>
 
+                <td style="font-weight: bold; font-size: 1.7rem; background:lightgrey;"><span v-if="!discipline.exempt">{{ discipline.average }}</span></td>
             </tr>
             <tr style="background: burlywood; font-weight: bold; font-size: large;">
                 <td>المعدل العام</td>
@@ -72,11 +72,15 @@
         },
         computed:{
             coefSum:function(){
-                var ret = this.disciplines.reduce( function(acc, discip){
-                    
-                    // غير معفى
-                    if( !discip.exempt ){
-                        return parseFloat(acc)+parseFloat(discip.coef)
+                var ret = this.disciplines.reduce( function(acc, discipline){
+                    if( typeof(discipline.parent) == 'undefined' || discipline.parent == '' ){
+                        // غير معفى
+                        if( !discipline.exempt ){
+                            return parseFloat(acc)+parseFloat(discipline.coef)
+                        }else{
+                            return parseFloat(acc)
+                        }
+                        
                     }else{
                         return parseFloat(acc)
                     }
@@ -91,11 +95,14 @@
                 return ret
             },
             marksSum:function(){
-              var ret = this.disciplines.reduce( function(acc, discip){
-                    
-                    // غير معفى
-                    if( !discip.exempt ){
-                        return parseFloat(acc)+parseFloat(discip.total)
+              var ret = this.disciplines.reduce( function(acc, discipline){
+                    if( typeof(discipline.parent) == 'undefined' || discipline.parent == '' ){
+                        // غير معفى
+                        if( !discipline.exempt ){
+                            return parseFloat(acc)+parseFloat(discipline.total)
+                        }else{
+                            return parseFloat(acc)
+                        }                        
                     }else{
                         return parseFloat(acc)
                     }
@@ -126,6 +133,7 @@
         border: 1px solid black;
         text-align: center;
         padding: 3px;
+        width: 90px;
     }
     input {
         width: 6rem;
@@ -175,6 +183,7 @@
         display: none;
         margin-left: auto;
         margin-right: auto;
+        border-radius: 50%;
     }
     td:hover button.add{
         display: block;
