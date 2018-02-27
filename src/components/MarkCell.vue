@@ -39,22 +39,33 @@
         methods:{
             sumDiscMarks: function(discipline){
                 return discipline.marks.reduce( function(acc, mark){
-                    return parseFloat(acc) + ( parseFloat(mark.val) * parseFloat(mark.coef) )
+
+                    // Ignore if mark value is not inserted yet
+                    if( mark.val == "" ){
+                        return parseFloat(acc)
+                    }else{
+                        return parseFloat(acc) + ( parseFloat(mark.val) * parseFloat(mark.coef) )
+                    }
                 }, 0)
             },
             sumDiscCoefs: function(discipline){
                 return discipline.marks.reduce( function(acc, mark){
-                    return parseFloat(acc) + parseFloat(mark.coef)
+
+                    // Ignore if mark value is not inserted yet
+                    if( mark.val == "" ){
+                        return parseFloat(acc)
+                    }else{
+                        return parseFloat(acc) + parseFloat(mark.coef)
+                    }                    
                 }, 0)
             },
             disciplineAverage: function(discipline){
                 var self = this
                 var sumMarks = self.sumDiscMarks(discipline)
                 var sumCoefs = self.sumDiscCoefs(discipline)
-
                 // Check for children disciples marks and coefs
                 sumMarks += self.disciplines.reduce(function(acc, des){
-                    if( typeof(des.parent) != 'undefined' && des.parent == discipline.name ){
+                    if( typeof(des.parent) != 'undefined' && des.parent == discipline.name){
                         return parseFloat(acc) + self.sumDiscMarks(des)
                     }else{
                         return parseFloat(acc)
